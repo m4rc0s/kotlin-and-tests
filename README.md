@@ -5,7 +5,11 @@ Kotlin Programming Language and Gradle over an containerized application;
 
 # Whats is it now?
 
-Demo application with basic testing tools setup for Kotlin with SpringBoot;
+Almost empty workspace with a sample application and markdowns;
+
+# Sample Apps
+
+- [Demo](https://github.com/m4rc0s/quality-and-delivery-pipelines/tree/main/apps/demo): Demo application is the first sample running code of this project. It contains the basic testing tools setup for testing with Kotlin on SpringBoot
 
 
 # Tools
