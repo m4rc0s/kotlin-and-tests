@@ -5,22 +5,12 @@ version: 2.1
 orbs:
   gradle: circleci/gradle@3.0.0
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-jobs:
-  unit-test:
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-    steps:
-      - checkout
-      - run:
-          name: "Run Unit Tests"
-          command: "cd apps/demo && ./gradlew clean unitTest"
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  feature-branch-pushed:
+  feature-branch:
     jobs:
       - gradle/test:
-          test_command: unitTest
+          name: "Unit Test"
+          app_src_directory: "./apps/demo/"
+          test_results_path: "./apps/demo/build/test-results/"
+          reports_path: "./apps/demo/build/reports"
+          test_command: "unitTest"
