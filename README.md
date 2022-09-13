@@ -1,7 +1,9 @@
-# CI/CD Testing and Koltin
+# CI/CD Testing and Kotlin
 
 This Repository will be about Software Delivery Life Cycle (SDLC), specifically quality, aiming on testing practices for continuous integration using 
 Kotlin Programming Language and Gradle over an containerized application;
+
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/m4rc0s/quality-and-delivery-pipelines/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/m4rc0s/quality-and-delivery-pipelines/tree/main)
 
 # Whats is it now?
 
