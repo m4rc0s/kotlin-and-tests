@@ -2,9 +2,20 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  deploy:
+    parameters: 
+      environment:
+        type: string
+        default: dev
+    steps:
+      - run:
+          name: Application Deployment
+          command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.customer >> environment
+    
+
 orbs:
   gradle: circleci/gradle@3.0.0
-
 
 jobs:
   build:
@@ -19,14 +30,11 @@ jobs:
       - run: gradle --version
       - run: cd apps/demo && ./gradlew clean build -x test && docker build .
       - run: docker image
-  dev-deploy:
-    name: deploy
-    docker:
-      - image: cimg/openjdk:18.0.2
-    steps:
-      - checkout
-      - run: echo "Deploy container to Kubernete Cluster with Argo in Dev Environment"
   deploy:
+    parameters:
+      environment:
+        type: string
+        default: dev
     docker:
       - image: cimg/openjdk:18.0.2
     steps:
@@ -52,7 +60,7 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
-      - dev-deploy:
+      - deploy:
           requires:
             - build
   deploy-to-prod:
@@ -63,6 +71,7 @@ workflows:
               only:
                - main
       - deploy:
+          environment: dev
           filters:
             branches:
               only:
