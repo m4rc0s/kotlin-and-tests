@@ -11,7 +11,7 @@ commands:
     steps:
       - run:
           name: Application Deployment
-          command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.customer >> environment
+          command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.environment >> environment
     
 
 orbs:
