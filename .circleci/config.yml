@@ -19,6 +19,12 @@ jobs:
       - run: gradle --version
       - run: cd apps/demo && ./gradlew clean build -x test && docker build .
       - run: docker image
+  deploy:
+    docker:
+      - image: cimg/openjdk:18.0.2
+    steps:
+      - checkout
+      - run: echo "Deploy container to Kubernete Cluster with Argo"
     
 workflows:
   build-and-test:
@@ -26,6 +32,7 @@ workflows:
       - build:
           requires:
             - component-test
+            - unit-test
       - gradle/test:
           name: unit-test
           app_src_directory: "./apps/demo/"
@@ -38,7 +45,8 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
+      - deploy:
           requires:
-            - unit-test
+            - build
 
 
