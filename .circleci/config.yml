@@ -43,7 +43,11 @@ jobs:
       
     
 workflows:
+<<<<<<< HEAD
   deploy-to-dev:
+=======
+  testApplication:
+>>>>>>> 9bdcae3 (feat: declare build step and setup filter by branch)
     jobs:
       - build:
           requires:
