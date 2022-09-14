@@ -14,6 +14,17 @@ commands:
           command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.environment >> environment
     
 
+ignore_main: &ignore_main
+  filters:
+    branches:
+      ignore: [main]
+
+only_main: &only_main
+  filters:
+    branches:
+      only: 
+        - main
+
 orbs:
   gradle: circleci/gradle@3.0.0
 
@@ -42,12 +53,13 @@ jobs:
           environment: << parameters.environment >>
     
 workflows:
-  deploy-to-dev:
+  quality-assurance:
+    when:
+      not:
+        matches:
+          pattern: "^main$"
+          value: << pipeline.git.branch >>
     jobs:
-      - build:
-          requires:
-            - component-test
-            - unit-test
       - gradle/test:
           name: unit-test
           app_src_directory: "./apps/demo/"
@@ -60,9 +72,6 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
-      - deploy:
-          requires:
-            - build
   deploy-to-prod:
     jobs:
       - build:
@@ -71,10 +80,7 @@ workflows:
               only:
                - main
       - deploy:
+          name: deploy
           environment: prod
-          filters:
-            branches:
-              only:
-               - main
           requires:
            - build
