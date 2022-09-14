@@ -61,6 +61,10 @@ workflows:
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
       - deploy:
+          name: dev-deploy
+          filters:
+            branches:
+              ignore: /.main/
           requires:
             - build
   deploy-to-prod:
@@ -71,6 +75,7 @@ workflows:
               only:
                - main
       - deploy:
+          name: deploy
           environment: prod
           filters:
             branches:
