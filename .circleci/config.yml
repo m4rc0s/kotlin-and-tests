@@ -5,8 +5,19 @@ version: 2.1
 orbs:
   gradle: circleci/gradle@3.0.0
 
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:18.0.2
+    steps:
+      - checkout
+      - run: pwd && ls -la
+      - run: gradle --version
+      - run: cd apps/demo && ./gradlew clean build && docker build .
+
 workflows:
-  feature-branch:
+  test:
     jobs:
       - gradle/test:
           name: "Unit Test"
@@ -20,3 +31,7 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
+  build:
+    jobs:
+      - build
+
