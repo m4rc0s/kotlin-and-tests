@@ -46,6 +46,10 @@ workflows:
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
       - deploy:
+          filters:
+            branches:
+              only:
+                - main
           requires:
             - build
 
