@@ -17,6 +17,10 @@ commands:
 orbs:
   gradle: circleci/gradle@3.0.0
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2f0bca0 (Any change branch (#4))
 jobs:
   build:
     docker:
@@ -31,6 +35,7 @@ jobs:
       - run: cd apps/demo && ./gradlew clean build -x test && docker build .
       - run: docker image
   deploy:
+<<<<<<< HEAD
     parameters:
       environment:
         type: string
@@ -48,6 +53,16 @@ workflows:
 =======
   testApplication:
 >>>>>>> 9bdcae3 (feat: declare build step and setup filter by branch)
+=======
+    docker:
+      - image: cimg/openjdk:18.0.2
+    steps:
+      - checkout
+      - run: echo "Deploy container to Kubernete Cluster with Argo"
+    
+workflows:
+  build-and-test:
+>>>>>>> 2f0bca0 (Any change branch (#4))
     jobs:
       - build:
           requires:
@@ -66,6 +81,7 @@ workflows:
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
       - deploy:
+<<<<<<< HEAD
           requires:
             - build
   deploy-to-prod:
@@ -83,5 +99,13 @@ workflows:
                - main
           requires:
            - build
+=======
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - build
+>>>>>>> 2f0bca0 (Any change branch (#4))
 
 
