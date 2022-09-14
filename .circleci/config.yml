@@ -24,17 +24,19 @@ workflows:
   test:
     jobs:
       - gradle/test:
-          name: "Unit Test"
+          name: unit-test
           app_src_directory: "./apps/demo/"
           test_results_path: "./apps/demo/build/test-results/test"
           reports_path: "./apps/demo/build/reports"
           test_command: "unitTest"
       - gradle/test:
-          name: "Component Test"
+          name: component-test
           app_src_directory: "./apps/demo/"
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
+          requires:
+            - unit-test
   build:
     jobs:
       - build
