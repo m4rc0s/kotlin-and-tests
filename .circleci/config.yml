@@ -6,7 +6,7 @@ orbs:
   gradle: circleci/gradle@3.0.0
 
 workflows:
-  feature-branch:
+  testApplication:
     jobs:
       - gradle/test:
           name: "Unit Test"
