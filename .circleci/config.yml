@@ -19,10 +19,13 @@ jobs:
       - run: gradle --version
       - run: cd apps/demo && ./gradlew clean build -x test && docker build .
       - run: docker image
-
+    
 workflows:
-  test:
+  build-and-test:
     jobs:
+      - build:
+          requires:
+            - component-test
       - gradle/test:
           name: unit-test
           app_src_directory: "./apps/demo/"
@@ -37,7 +40,5 @@ workflows:
           test_command: "componentTest"
           requires:
             - unit-test
-  build:
-    jobs:
-      - build
+
 
