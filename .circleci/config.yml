@@ -53,7 +53,7 @@ jobs:
           environment: << parameters.environment >>
     
 workflows:
-  test:
+  quality-assurance:
     when:
       not:
         matches:
