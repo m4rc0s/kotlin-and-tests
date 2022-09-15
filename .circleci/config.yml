@@ -13,17 +13,19 @@ commands:
           name: Application Deployment
           command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.environment >> environment
     
+branch_not_main_filter: &run_when_branch_not_main
+  when:
+    not:
+      matches:
+        pattern: "^main$"
+        value: << pipeline.git.branch >>
 
-ignore_main: &ignore_main
-  filters:
-    branches:
-      ignore: [main]
+branch_is_main_filter: &run_when_branch_is_main
+  when:
+    matches:
+      pattern: "^main$"
+      value: << pipeline.git.branch >>        
 
-only_main: &only_main
-  filters:
-    branches:
-      only: 
-        - main
 
 orbs:
   gradle: circleci/gradle@3.0.0
@@ -53,12 +55,8 @@ jobs:
           environment: << parameters.environment >>
     
 workflows:
-  quality-assurance:
-    when:
-      not:
-        matches:
-          pattern: "^main$"
-          value: << pipeline.git.branch >>
+  quality_assurance:
+    <<: *run_when_branch_not_main
     jobs:
       - gradle/test:
           name: unit-test
@@ -72,13 +70,11 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
-  deploy-to-prod:
+  build_and_deploy:
+    <<: *run_when_branch_is_main
     jobs:
       - build:
-          filters:
-            branches:
-              only:
-               - main
+          context: SonarCloud
       - deploy:
           name: deploy
           environment: prod
