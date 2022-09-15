@@ -84,7 +84,6 @@ workflows:
           test_command: "componentTest"
   build_and_deploy:
     <<: *when_branch_is_main
-    when:
     jobs:
       - build
       - deploy:
