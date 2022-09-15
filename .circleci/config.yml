@@ -62,11 +62,6 @@ workflows:
           test_command: "componentTest"
       - deploy:
           name: dev-deploy
-          filters:
-            branches:
-              ignore: /.main/
-          requires:
-            - build
   deploy-to-prod:
     jobs:
       - build:
@@ -77,9 +72,5 @@ workflows:
       - deploy:
           name: deploy
           environment: prod
-          filters:
-            branches:
-              only:
-               - main
           requires:
            - build
