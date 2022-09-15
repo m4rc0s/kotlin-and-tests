@@ -13,26 +13,14 @@ commands:
           name: Application Deployment
           command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.environment >> environment
     
-
-ignore_main: &ignore_main
-  filters:
-    branches:
-      ignore: [main]
-
-only_main: &only_main
-  filters:
-    branches:
-      only: 
-        - main
-
-when_branch_not_main: &when_branch_not_main
+branch_not_main_filter: &run_when_branch_not_main
   when:
     not:
       matches:
         pattern: "^main$"
         value: << pipeline.git.branch >>
 
-when_branch_is_main: &when_branch_is_main
+branch_is_main_filter: &run_when_branch_is_main
   when:
     matches:
       pattern: "^main$"
@@ -68,7 +56,7 @@ jobs:
     
 workflows:
   quality_assurance:
-    <<: *when_branch_not_main
+    <<: *run_when_branch_not_main
     jobs:
       - gradle/test:
           name: unit-test
@@ -83,7 +71,7 @@ workflows:
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
   build_and_deploy:
-    <<: *when_branch_is_main
+    <<: *run_when_branch_is_main
     jobs:
       - build
       - deploy:
