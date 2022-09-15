@@ -32,13 +32,10 @@ orbs:
 
 jobs:
   build:
-    docker:
+    machine:
       - image: cimg/openjdk:18.0.2
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
       - run: pwd && ls -la
       - run: gradle --version
       - run: cd apps/demo && gradle clean build -x test && docker build .
