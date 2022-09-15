@@ -14,6 +14,10 @@ commands:
           command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.environment >> environment
     
 
+only_dev: &only_dev
+  filters:
+    branches:
+      only: [/^feature.*/, /^hotfix.*/]
 orbs:
   gradle: circleci/gradle@3.0.0
 
@@ -54,9 +58,7 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/test"
           reports_path: "./apps/demo/build/reports"
           test_command: "unitTest"
-          filters:
-            branches:
-              only: [/^feature.*/, /^hotfix.*/]
+          <<: *only_dev
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"
