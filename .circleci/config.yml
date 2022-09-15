@@ -56,8 +56,7 @@ workflows:
           test_command: "unitTest"
           filters:
             branches:
-              only:
-               - ["feature/*", "hotfix/*"]
+              only: ["feature/*", "hotfix/*"]
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"
