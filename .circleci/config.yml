@@ -14,7 +14,7 @@ commands:
           command: echo Deploy application to Kubernetes Cluster with Argo in << parameters.environment >> environment
     
 
-only_dev: &only_dev
+ignore_main: &ignore_main
   filters:
     branches:
       ignore: [main]
@@ -53,28 +53,27 @@ jobs:
           environment: << parameters.environment >>
     
 workflows:
-  deploy-to-dev:
+  test:
+    when:
+      not:
+        matches:
+          pattern: "^main$"
+          value: << pipeline.git.branch >>
     jobs:
-      - build:
-          requires:
-            - component-test
-            - unit-test
       - gradle/test:
           name: unit-test
           app_src_directory: "./apps/demo/"
           test_results_path: "./apps/demo/build/test-results/test"
           reports_path: "./apps/demo/build/reports"
           test_command: "unitTest"
-          <<: *only_dev
+          <<: *ignore_main
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
-          <<: *only_dev
-      - deploy:
-          name: dev-deploy
+          <<: *ignore_main
   deploy-to-prod:
     jobs:
       - build:
