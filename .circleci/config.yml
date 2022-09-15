@@ -25,6 +25,20 @@ only_main: &only_main
       only: 
         - main
 
+when_branch_not_main: &when_branch_not_main
+  when:
+    not:
+      matches:
+        pattern: "^main$"
+        value: << pipeline.git.branch >>
+
+when_branch_is_main: &when_branch_is_main
+  when:
+    matches:
+      pattern: "^main$"
+      value: << pipeline.git.branch >>        
+
+
 orbs:
   gradle: circleci/gradle@3.0.0
 
@@ -53,12 +67,8 @@ jobs:
           environment: << parameters.environment >>
     
 workflows:
-  quality-assurance:
-    when:
-      not:
-        matches:
-          pattern: "^main$"
-          value: << pipeline.git.branch >>
+  quality_assurance:
+    <<: *when_branch_not_main
     jobs:
       - gradle/test:
           name: unit-test
@@ -72,13 +82,11 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
-  deploy-to-prod:
+  build_and_deploy:
+    <<: *when_branch_is_main
+    when:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-               - main
+      - build
       - deploy:
           name: deploy
           environment: prod
