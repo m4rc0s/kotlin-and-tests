@@ -41,7 +41,7 @@ jobs:
           docker_layer_caching: true
       - run: pwd && ls -la
       - run: gradle --version
-      - run: cd apps/demo && ./gradlew clean build -x test && docker build .
+      - run: cd apps/demo && gradle clean build -x test && docker build .
       - run: docker image
   deploy:
     parameters:
