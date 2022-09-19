@@ -73,7 +73,8 @@ workflows:
   build_and_deploy:
     <<: *run_when_branch_is_main
     jobs:
-      - build
+      - build:
+          context: SonarCloud
       - deploy:
           name: deploy
           environment: prod

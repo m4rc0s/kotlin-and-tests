@@ -6,6 +6,9 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.13.RELEASE"
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
+	id("org.sonarqube") version "3.4.0.2513"
+	jacoco
+	application
 }
 
 group = "org.quality"
@@ -28,6 +31,14 @@ sourceSets {
 	}
 }
 
+sonarqube {
+	properties {
+		property("sonar.projectKey", "m4rc0s_quality-and-delivery-pipelines")
+		property("sonar.organization", "quality-and-delivery-pipelines")
+		property("sonar.host.url", "https://sonarcloud.io")
+	}
+}
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -39,6 +50,11 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.mockk:mockk:1.12.7")
 	testImplementation("io.kotest:kotest-assertions-core-jvm:5.4.2")
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDirectory.set(layout.buildDirectory.dir("testReports"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -66,10 +82,20 @@ tasks.withType<Test> {
 tasks.register<Test>("unitTest") {
 	testClassesDirs = sourceSets["test"].output.classesDirs
 	classpath = sourceSets["test"].runtimeClasspath
-
+	finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.register<Test>("componentTest") {
 	testClassesDirs = sourceSets["componentTest"].output.classesDirs
 	classpath = sourceSets["componentTest"].runtimeClasspath
+}
+
+tasks.jacocoTestReport {
+	executionData.setFrom("$buildDir/jacoco/unitTest.exec")
+	reports {
+		csv.required.set(false)
+		xml.required.set(true)
+		html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+	}
+	dependsOn(tasks.findByName("unitTest"))
 }
