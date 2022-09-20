@@ -53,17 +53,25 @@ jobs:
     steps:
       - deploy-cmd:
           environment: << parameters.environment >>
-    
+  unit-test: 
+    docker:
+      - image: cimg/openjdk:18.0.2
+
+    working_directory: /mnt/ramdisk
+
+    steps:
+      - checkout
+      - run: |
+          echo '#!/bin/sh' > run.sh
+          echo 'echo Hello world!' >> run.sh
+          chmod +x run.sh
+      - run: ./run.sh
+
 workflows:
   quality_assurance:
     <<: *run_when_branch_not_main
     jobs:
-      - gradle/test:
-          name: unit-test
-          app_src_directory: "./apps/demo/"
-          test_results_path: "./apps/demo/build/test-results/test"
-          reports_path: "./apps/demo/build/reports"
-          test_command: "unitTest"
+      - unit-test
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"
