@@ -66,6 +66,7 @@ jobs:
           echo 'echo Hello world!' >> run.sh
           chmod +x run.sh
       - run: ./run.sh
+      - run: gradle --version
 
 workflows:
   quality_assurance:
