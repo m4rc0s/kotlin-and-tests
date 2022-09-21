@@ -65,6 +65,7 @@ jobs:
           command: |
             mkdir -p ~/test-results
             cd apps/demo 
+            ./gradlew clean unitTest
             ls -la 
             cp build/testReports/test/* ~/test-results
       - store_test_results:
