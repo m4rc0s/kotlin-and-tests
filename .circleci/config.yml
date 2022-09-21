@@ -68,7 +68,7 @@ jobs:
             ls -la 
             cd build/test-results/unitTest && ls -la 
             cp *.xml ~/test-results/reports
-      - run: cd apps/demo && ./gradlew sonarqube
+      - run: ls -la && cd apps/demo && ./gradlew sonarqube
       - store_test_results:
           path: ~/test-results
 
