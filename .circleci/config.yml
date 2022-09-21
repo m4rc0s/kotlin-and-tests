@@ -68,7 +68,7 @@ jobs:
       - run: ./run.sh
       - run: ls -la
       - run: cd apps/demo && ./gradlew unitTest
-      - run: ls -la
+      - run: cd apps/demo/build && ls -la 
 
 workflows:
   quality_assurance:
