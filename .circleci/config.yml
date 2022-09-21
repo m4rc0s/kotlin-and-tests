@@ -61,14 +61,8 @@ jobs:
 
     steps:
       - checkout
-      - run: |
-          echo '#!/bin/sh' > run.sh
-          echo 'echo Hello world!' >> run.sh
-          chmod +x run.sh
-      - run: ./run.sh
-      - run: ls -la
       - run: cd apps/demo && gradle unitTest
-      - store_artifacts:
+      - store_test_results:
           path: /mnt/ramdisk/apps/demo/build/testReports/test/jacocoTestReport.xml
           destination: jacocoTestReport.xml
 
