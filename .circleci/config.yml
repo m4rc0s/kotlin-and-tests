@@ -61,15 +61,14 @@ jobs:
 
     steps:
       - checkout
-      - run: 
-          command: |
+      - run: |
             mkdir -p ~/test-results/reports
             ls -la
             cd apps/demo && ./gradlew clean unitTest
             ls -la 
             cd build/test-results/unitTest && ls -la 
             cp *.xml ~/test-results/reports
-            cd ~/test-results
+      - run: cd apps/demo && ./gradlew sonarqube
       - store_test_results:
           path: ~/test-results
 
@@ -77,7 +76,8 @@ workflows:
   quality_assurance:
     <<: *run_when_branch_not_main
     jobs:
-      - unit-test
+      - unit-test:
+          context: SonarCloud
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"
