@@ -66,11 +66,7 @@ jobs:
             mkdir -p ~/test-results/reports
             ls -la
             cd apps/demo && ./gradlew clean unitTest
-      - run:
-          command: |
-            cd apps/demo/build/test-results/unitTest && ls -la
-            cp *.xml ~/test-results/reports
-            cd ~/test-results
+      - run: cd apps/demo/build/test-results/unitTest && ls -la && cp *.xml ~/test-results/reports && cd ~/test-results
       - store_test_results:
           path: ~/test-results
 
