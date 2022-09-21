@@ -64,8 +64,8 @@ jobs:
       - run: 
           command: |
             cd apps/demo 
-            gradle unitTest 
-            mkdir test-results 
+            mkdir test-results
+            ls -la 
             cp ~/build/testReports/test/* ~/test-results
       - store_test_results:
           path: ~/test-results
