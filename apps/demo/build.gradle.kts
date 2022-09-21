@@ -36,7 +36,7 @@ sonarqube {
 		property("sonar.projectKey", "m4rc0s_quality-and-delivery-pipelines")
 		property("sonar.organization", "quality-and-delivery-pipelines")
 		property("sonar.host.url", "https://sonarcloud.io")
-		property("sonar.jacoco.reportPaths", "$buildDir/testReports/test/*.xml")
+		property("sonar.jacoco.reportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
 	}
 }
 
