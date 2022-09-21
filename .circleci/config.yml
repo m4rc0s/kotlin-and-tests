@@ -64,10 +64,11 @@ jobs:
       - run: 
           command: |
             mkdir -p ~/test-results
-            cd apps/demo 
-            ./gradlew clean unitTest
+            ls -la
+            cd apps/demo && ./gradlew clean unitTest
             ls -la 
-            cp build/testReports/test/* ~/test-results
+            cd build/testReports/test/ &&ls -la 
+            cp jacocoTestReport.xml ~/test-results/report.xml
       - store_test_results:
           path: ~/test-results
 
