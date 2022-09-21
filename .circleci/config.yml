@@ -62,7 +62,7 @@ jobs:
     steps:
       - checkout
       - run: 
-          command: |
+          command: >
             mkdir -p ~/test-results/reports
             ls -la
             cd apps/demo && ./gradlew clean unitTest
