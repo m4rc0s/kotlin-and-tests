@@ -67,7 +67,7 @@ jobs:
           chmod +x run.sh
       - run: ./run.sh
       - run: ls -la
-      - run: cd apps/demo && ./gradlew unitTest
+      - run: cd apps/demo && gradle unitTest
       - run: cd apps/demo/build && ls -la 
 
 workflows:
