@@ -63,8 +63,7 @@ jobs:
       - checkout
       - run: cd apps/demo && gradle unitTest
       - store_test_results:
-          path: /mnt/ramdisk/apps/demo/build/testReports/test/jacocoTestReport.xml
-          destination: jacocoTestReport.xml
+          path: /mnt/ramdisk/apps/demo/build/testReports
 
 workflows:
   quality_assurance:
