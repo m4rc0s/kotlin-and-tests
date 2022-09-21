@@ -63,12 +63,13 @@ jobs:
       - checkout
       - run: 
           command: |
-            mkdir -p ~/test-results
+            mkdir -p ~/test-results/reports
             ls -la
             cd apps/demo && ./gradlew clean unitTest
             ls -la 
             cd build/test-results/unitTest && ls -la 
-            cp *.xml ~/test-results
+            cp *.xml ~/test-results/reports
+            cd ~/test-results
       - store_test_results:
           path: ~/test-results
 
