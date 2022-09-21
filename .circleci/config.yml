@@ -61,7 +61,12 @@ jobs:
 
     steps:
       - checkout
-      - run: cd apps/demo && gradle unitTest && mkdir test-results && cp build/testReports/test/* ~/test-results
+      - run: 
+          command: |
+            cd apps/demo 
+            gradle unitTest 
+            mkdir test-results 
+            cp ~/build/testReports/test/* ~/test-results
       - store_test_results:
           path: ~/test-results
 
