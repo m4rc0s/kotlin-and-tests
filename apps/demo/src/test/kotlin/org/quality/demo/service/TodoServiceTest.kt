@@ -37,7 +37,7 @@ internal class TodoServiceTest {
 
         val actualTodo = service.create(actualTodoDto)
 
-        actualTodo.description shouldBe "Make it fail"
+        actualTodo.description shouldBe expectedTodo.description
 
         verify(exactly = 1) { repository.save(any()) }
 
