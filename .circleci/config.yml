@@ -68,7 +68,9 @@ jobs:
       - run: ./run.sh
       - run: ls -la
       - run: cd apps/demo && gradle unitTest
-      - run: cd apps/demo/build && ls -la 
+      - store_artifactass:
+        path: /mnt/ramdisk/apps/demo/build/testReports/test/jacocoTestReport.xml
+        destination: jacocoTestReport.xml
 
 workflows:
   quality_assurance:
