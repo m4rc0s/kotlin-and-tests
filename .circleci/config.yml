@@ -63,10 +63,10 @@ jobs:
       - checkout
       - run: 
           command: |
+            mkdir -p ~/test-results
             cd apps/demo 
-            mkdir test-results
             ls -la 
-            cp /build/testReports/test/* ~/test-results
+            cp build/testReports/test/* ~/test-results
       - store_test_results:
           path: ~/test-results
 
