@@ -67,7 +67,7 @@ jobs:
             ls -la
             cd apps/demo && ./gradlew clean unitTest
             ls -la 
-            cd test-results/unitTest && ls -la 
+            cd build/test-results/unitTest && ls -la 
             cp *.xml ~/test-results
       - store_test_results:
           path: ~/test-results
