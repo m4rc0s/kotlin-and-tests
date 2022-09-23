@@ -34,6 +34,8 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:18.0.2
+        environment:
+          SONAR_TOKEN: $SONAR_TOKEN
     steps:
       - checkout
       - setup_remote_docker:
@@ -56,6 +58,8 @@ jobs:
   unit-test: 
     docker:
       - image: cimg/openjdk:18.0.2
+        environment:
+          SONAR_TOKEN: $SONAR_TOKEN
 
     working_directory: /mnt/ramdisk
 
@@ -63,12 +67,10 @@ jobs:
       - checkout
       - run: |
             mkdir -p ~/test-results/reports
-            ls -la
-            cd apps/demo && ./gradlew clean unitTest
-            ls -la 
-            cd build/test-results/unitTest && ls -la 
-            cp *.xml ~/test-results/reports
-      - run: ls -la && cd apps/demo && ./gradlew sonarqube
+            cd apps/demo && ./gradlew clean unitTest 
+            cp build/test-results/unitTest/*.xml ~/test-results/reports
+            echo $SONAR_TOKEN
+      - run: ls -la && cd apps/demo && ./gradlew sonarqube --Dsonar.login=$SONAR_TOKEN
       - store_test_results:
           path: ~/test-results
 
