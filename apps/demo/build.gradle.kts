@@ -31,24 +31,24 @@ sourceSets {
 	}
 }
 
-/*sonarqube {
+sonarqube {
 	properties {
 		property("sonar.projectKey", "m4rc0s_quality-and-delivery-pipelines")
 		property("sonar.organization", "quality-and-delivery-pipelines")
 		property("sonar.host.url", "https://sonarcloud.io")
 		property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
 	}
-}*/
+}
 
 
-sonarqube {
+/*sonarqube {
 	properties {
 		property("sonar.projectKey", "QualityAssuranceDemo")
 		property("sonar.host.url", "http://localhost:9000")
 		property("sonar.login", "sqp_0d6fd44cedc28960251dad0846198fb471151d24")
 		property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
 	}
-}
+}*/
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
