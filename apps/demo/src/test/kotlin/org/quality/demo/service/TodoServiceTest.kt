@@ -1,5 +1,6 @@
 package org.quality.demo.service
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -38,6 +39,7 @@ internal class TodoServiceTest {
         val actualTodo = service.create(actualTodoDto)
 
         actualTodo.description shouldBe expectedTodo.description
+        actualTodo.dueDate shouldNotBe LocalDateTime.now()
 
         verify(exactly = 1) { repository.save(any()) }
 
