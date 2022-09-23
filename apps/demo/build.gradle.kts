@@ -31,8 +31,10 @@ sourceSets {
 	}
 }
 
+val sonarToken = System.getenv("SONAR_TOKEN") ?: error("You need to set SONAR_TOKEN env var")
 sonarqube {
 	properties {
+		property("sonar.login", System.getenv("SONAR_TOKEN"))
 		property("sonar.projectKey", "m4rc0s_quality-and-delivery-pipelines")
 		property("sonar.organization", "quality-and-delivery-pipelines")
 		property("sonar.host.url", "https://sonarcloud.io")

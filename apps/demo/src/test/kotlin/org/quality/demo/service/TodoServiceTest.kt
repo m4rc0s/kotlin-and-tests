@@ -39,7 +39,7 @@ internal class TodoServiceTest {
         val actualTodo = service.create(actualTodoDto)
 
         actualTodo.description shouldBe expectedTodo.description
-        actualTodo.dueDate shouldNotBe LocalDateTime.now()
+        //actualTodo.dueDate shouldNotBe LocalDateTime.now()
 
         verify(exactly = 1) { repository.save(any()) }
 
