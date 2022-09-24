@@ -37,7 +37,7 @@ class TodoService(
             )
 
     fun sayHello() {
-        print("Fuck you")
+        print("Now you has less than 80% of coverage!")
     }
 
 }
