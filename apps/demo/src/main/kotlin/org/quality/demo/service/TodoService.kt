@@ -36,4 +36,8 @@ class TodoService(
                 )
             )
 
+    fun sayHello() {
+        print("Fuck you")
+    }
+
 }
