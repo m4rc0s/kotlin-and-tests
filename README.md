@@ -24,5 +24,11 @@ Almost empty workspace with a sample application and markdowns;
 
 
 
+sqp_0d6fd44cedc28960251dad0846198fb471151d24
 
+./gradlew sonarqube \                                                                                 [19:17:55]
+  -Dsonar.projectKey=QualityAssuranceDemo \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=sqp_0d6fd44cedc28960251dad0846198fb471151d24
+  -Dsonar.jacoco.xmlReportPaths="../apps/demo/build/testReports/test/jacocoTestReport.xml"
 

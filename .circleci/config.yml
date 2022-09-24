@@ -34,6 +34,8 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:18.0.2
+        environment:
+          SONAR_TOKEN: $SONAR_TOKEN
     steps:
       - checkout
       - setup_remote_docker:
@@ -41,8 +43,10 @@ jobs:
           docker_layer_caching: true
       - run: pwd && ls -la
       - run: gradle --version
-      - run: cd apps/demo && ./gradlew clean build -x test && docker build .
-      - run: docker image
+      - run: |
+          cd apps/demo
+          ./gradlew clean build && ./gradlew sonarqube
+          docker build .
   deploy:
     parameters:
       environment:
@@ -61,17 +65,23 @@ jobs:
 
     steps:
       - checkout
-      - run: |
-          echo '#!/bin/sh' > run.sh
-          echo 'echo Hello world!' >> run.sh
-          chmod +x run.sh
-      - run: ./run.sh
+      - run: 
+          name: "Run unit tests and publish reports"
+          command: |
+            mkdir -p ~/test-results/reports
+            cd apps/demo && ./gradlew clean unitTest jacocoTestReport 
+            ./gradlew sonarqube -i
+            cp build/test-results/unitTest/*.xml ~/test-results/reports
+            ls -la build/testReports/test
+      - store_test_results:
+          path: ~/test-results
 
 workflows:
   quality_assurance:
     <<: *run_when_branch_not_main
     jobs:
-      - unit-test
+      - unit-test:
+          context: SonarCloud
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"

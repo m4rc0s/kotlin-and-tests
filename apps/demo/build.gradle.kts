@@ -33,9 +33,12 @@ sourceSets {
 
 sonarqube {
 	properties {
+		property("sonar.login", System.getenv("SONAR_TOKEN"))
 		property("sonar.projectKey", "m4rc0s_quality-and-delivery-pipelines")
 		property("sonar.organization", "quality-and-delivery-pipelines")
 		property("sonar.host.url", "https://sonarcloud.io")
+		property("sonar.jacoco.reportPaths", "$buildDir/jacoco/unitTest.exec")
+		property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
 	}
 }
 
@@ -80,6 +83,9 @@ tasks.withType<Test> {
 }
 
 tasks.register<Test>("unitTest") {
+	doFirst {
+		val sonarToken = System.getenv("SONAR_TOKEN") ?: error("You need to set SONAR_TOKEN env var")
+	}
 	testClassesDirs = sourceSets["test"].output.classesDirs
 	classpath = sourceSets["test"].runtimeClasspath
 	finalizedBy(tasks.jacocoTestReport)
