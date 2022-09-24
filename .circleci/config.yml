@@ -31,6 +31,36 @@ orbs:
   gradle: circleci/gradle@3.0.0
 
 jobs:
+  static-code-analysis:
+    docker:
+      - image: cimg/openjdk:18.0.2
+    
+    working_directory: /mnt/ramdisk
+
+    steps:
+      - checkout
+      - run:
+          name: Code analysis
+          command: |
+            cd apps/demo && ./gradlew clean detekt && ./gradlew sonarqube
+  unit-test: 
+    docker:
+      - image: cimg/openjdk:18.0.2
+
+    working_directory: /mnt/ramdisk
+
+    steps:
+      - checkout
+      - run: 
+          name: "Run unit tests and publish reports"
+          command: |
+            mkdir -p ~/test-results/reports
+            cd apps/demo && ./gradlew clean unitTest jacocoTestReport 
+            ./gradlew sonarqube -i
+            cp build/test-results/unitTest/*.xml ~/test-results/reports
+            ls -la build/testReports/test
+      - store_test_results:
+          path: ~/test-results
   build:
     docker:
       - image: cimg/openjdk:18.0.2
@@ -57,29 +87,13 @@ jobs:
     steps:
       - deploy-cmd:
           environment: << parameters.environment >>
-  unit-test: 
-    docker:
-      - image: cimg/openjdk:18.0.2
-
-    working_directory: /mnt/ramdisk
-
-    steps:
-      - checkout
-      - run: 
-          name: "Run unit tests and publish reports"
-          command: |
-            mkdir -p ~/test-results/reports
-            cd apps/demo && ./gradlew clean unitTest jacocoTestReport 
-            ./gradlew sonarqube -i
-            cp build/test-results/unitTest/*.xml ~/test-results/reports
-            ls -la build/testReports/test
-      - store_test_results:
-          path: ~/test-results
 
 workflows:
   quality_assurance:
     <<: *run_when_branch_not_main
     jobs:
+      - static-code-analysis:
+          context: SonarCloud
       - unit-test:
           context: SonarCloud
       - gradle/test:

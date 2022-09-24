@@ -1,3 +1,4 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -7,6 +8,7 @@ plugins {
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	id("org.sonarqube") version "3.4.0.2513"
+	id("io.gitlab.arturbosch.detekt").version("1.21.0")
 	jacoco
 	application
 }
@@ -39,7 +41,42 @@ sonarqube {
 		property("sonar.host.url", "https://sonarcloud.io")
 		property("sonar.jacoco.reportPaths", "$buildDir/jacoco/unitTest.exec")
 		property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
+		property("sonar.kotlin.detekt.reportPaths", "$buildDir/reports/detekt/output.xml")
 	}
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDirectory.set(layout.buildDirectory.dir("testReports"))
+}
+
+detekt {
+	source = files(
+		"src/main/kotlin",
+		"src/test/kotlin",
+		"src/componentTest/kotlin"
+	)
+
+	config = files("$projectDir/detekt.yml")
+}
+
+
+tasks.withType<Detekt>().configureEach {
+	reports {
+		xml {
+			outputLocation.set(file("build/reports/detekt/output.xml"))
+		}
+	}
+	include("**/*.kt")
+	include("**/*.kts")
+	exclude("resources/")
+	exclude("build/")
+}
+
+tasks.named("check").configure {
+	this.setDependsOn(this.dependsOn.filterNot {
+		it is TaskProvider<*> && it.name == "detekt"
+	})
 }
 
 dependencies {
@@ -53,11 +90,6 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.mockk:mockk:1.12.7")
 	testImplementation("io.kotest:kotest-assertions-core-jvm:5.4.2")
-}
-
-jacoco {
-	toolVersion = "0.8.8"
-	reportsDirectory.set(layout.buildDirectory.dir("testReports"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -90,6 +122,8 @@ tasks.register<Test>("unitTest") {
 	classpath = sourceSets["test"].runtimeClasspath
 	finalizedBy(tasks.jacocoTestReport)
 }
+
+
 
 tasks.register<Test>("componentTest") {
 	testClassesDirs = sourceSets["componentTest"].output.classesDirs
