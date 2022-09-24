@@ -67,7 +67,7 @@ jobs:
       - checkout
       - run: |
             mkdir -p ~/test-results/reports
-            cd apps/demo && ./gradlew clean unitTest 
+            cd apps/demo && ./gradlew clean unitTest && ./gradlew jacocoTestReport
             cp build/test-results/unitTest/*.xml ~/test-results/reports
             ls -la build/testReports/test
             export SONAR_TOKEN=e927b3913485346eeb68b540687d6cfcb1dfa9bb
