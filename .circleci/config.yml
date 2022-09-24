@@ -58,8 +58,6 @@ jobs:
   unit-test: 
     docker:
       - image: cimg/openjdk:18.0.2
-        environment:
-          SONAR_TOKEN: $SONAR_TOKEN
 
     working_directory: /mnt/ramdisk
 
