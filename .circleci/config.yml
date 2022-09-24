@@ -45,7 +45,7 @@ jobs:
       - run: gradle --version
       - run: |
           cd apps/demo
-          ./gradlew clean build && ./gradlew sonarqube
+          ./gradlew clean build
           docker build .
   deploy:
     parameters:
@@ -91,8 +91,11 @@ workflows:
   build_and_deploy:
     <<: *run_when_branch_is_main
     jobs:
-      - build:
+      - unit-test:
           context: SonarCloud
+      - build:
+          requires:
+            - unit-test
       - deploy:
           name: deploy
           environment: prod
