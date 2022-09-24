@@ -66,8 +66,6 @@ jobs:
       - run: 
           name: "Run unit tests and publish reports"
           command: |
-            export SONAR_TOKEN=e927b3913485346eeb68b540687d6cfcb1dfa9bb
-            echo $SONAR_TOKEN
             mkdir -p ~/test-results/reports
             cd apps/demo && ./gradlew clean unitTest jacocoTestReport 
             ./gradlew sonarqube -i
@@ -80,7 +78,8 @@ workflows:
   quality_assurance:
     <<: *run_when_branch_not_main
     jobs:
-      - unit-test
+      - unit-test:
+          context: SonarCloud
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"

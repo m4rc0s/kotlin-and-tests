@@ -41,7 +41,7 @@ internal class TodoServiceTest {
         actualTodo.description shouldBe expectedTodo.description
         actualTodo.dueDate shouldNotBe LocalDateTime.now()
 
-        verify(exactly = 0) { repository.save(any()) }
+        verify(exactly = 1) { repository.save(any()) }
 
     }
 }
