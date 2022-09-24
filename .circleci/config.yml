@@ -68,11 +68,9 @@ jobs:
             echo $SONAR_TOKEN
             mkdir -p ~/test-results/reports
             cd apps/demo && ./gradlew clean unitTest jacocoTestReport 
-            ./gradlew sonarqube
+            ./gradlew sonarqube -i
             cp build/test-results/unitTest/*.xml ~/test-results/reports
             ls -la build/testReports/test
-            ls -la
-            ./gradlew sonarqube
       - store_test_results:
           path: ~/test-results
 

@@ -39,8 +39,8 @@ sonarqube {
 		property("sonar.projectKey", "m4rc0s_quality-and-delivery-pipelines")
 		property("sonar.organization", "quality-and-delivery-pipelines")
 		property("sonar.host.url", "https://sonarcloud.io")
-		property("sonar.jacoco.reportPaths", "$buildDir/jacoco/unitTest.exec")
-		property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
+		//property("sonar.jacoco.reportPaths", "$buildDir/jacoco/unitTest.exec")
+		//property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
 	}
 }
 
@@ -69,7 +69,7 @@ dependencies {
 
 jacoco {
 	toolVersion = "0.8.8"
-	reportsDirectory.set(layout.buildDirectory.dir("testReports"))
+	//reportsDirectory.set(layout.buildDirectory.dir("testReports"))
 }
 
 tasks.withType<KotlinCompile> {
