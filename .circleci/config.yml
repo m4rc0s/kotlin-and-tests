@@ -79,8 +79,7 @@ workflows:
   quality_assurance:
     <<: *run_when_branch_not_main
     jobs:
-      - unit-test:
-          context: SonarCloud
+      - unit-test
       - gradle/test:
           name: component-test
           app_src_directory: "./apps/demo/"
