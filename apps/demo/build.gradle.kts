@@ -32,8 +32,6 @@ sourceSets {
 }
 
 sonarqube {
-	val sonarToken = System.getenv("SONAR_TOKEN") ?: error("You need to set SONAR_TOKEN env var")
-
 	properties {
 		property("sonar.login", System.getenv("SONAR_TOKEN"))
 		property("sonar.projectKey", "m4rc0s_quality-and-delivery-pipelines")
@@ -43,16 +41,6 @@ sonarqube {
 		property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
 	}
 }
-
-
-/*sonarqube {
-	properties {
-		property("sonar.projectKey", "QualityAssuranceDemo")
-		property("sonar.host.url", "http://localhost:9000")
-		property("sonar.login", "sqp_0d6fd44cedc28960251dad0846198fb471151d24")
-		property("sonar.jacoco.xmlReportPaths", "$buildDir/testReports/test/jacocoTestReport.xml")
-	}
-}*/
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -95,9 +83,12 @@ tasks.withType<Test> {
 }
 
 tasks.register<Test>("unitTest") {
-	testClassesDirs = sourceSets["test"].output.classesDirs
-	classpath = sourceSets["test"].runtimeClasspath
-	finalizedBy(tasks.jacocoTestReport)
+	doLast {
+		val sonarToken = System.getenv("SONAR_TOKEN") ?: error("You need to set SONAR_TOKEN env var")
+		testClassesDirs = sourceSets["test"].output.classesDirs
+		classpath = sourceSets["test"].runtimeClasspath
+		finalizedBy(tasks.jacocoTestReport)
+	}
 }
 
 tasks.register<Test>("componentTest") {
