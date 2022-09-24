@@ -83,12 +83,12 @@ tasks.withType<Test> {
 }
 
 tasks.register<Test>("unitTest") {
-	doLast {
+	doFirst {
 		val sonarToken = System.getenv("SONAR_TOKEN") ?: error("You need to set SONAR_TOKEN env var")
-		testClassesDirs = sourceSets["test"].output.classesDirs
-		classpath = sourceSets["test"].runtimeClasspath
-		finalizedBy(tasks.jacocoTestReport)
 	}
+	testClassesDirs = sourceSets["test"].output.classesDirs
+	classpath = sourceSets["test"].runtimeClasspath
+	finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.register<Test>("componentTest") {
