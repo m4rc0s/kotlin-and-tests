@@ -70,8 +70,8 @@ jobs:
             cd apps/demo && ./gradlew clean unitTest 
             cp build/test-results/unitTest/*.xml ~/test-results/reports
             echo $SONAR_TOKEN
-            ls -la apps/demo/build
-            ls -la && cd apps/demo && ./gradlew sonarqube
+            ls -la
+            ./gradlew sonarqube
       - store_test_results:
           path: ~/test-results
 
