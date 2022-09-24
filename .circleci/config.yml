@@ -63,7 +63,9 @@ jobs:
 
     steps:
       - checkout
-      - run: |
+      - run: 
+          name: "Run unit tests and publish reports"
+          command: |
             export SONAR_TOKEN=e927b3913485346eeb68b540687d6cfcb1dfa9bb
             echo $SONAR_TOKEN
             mkdir -p ~/test-results/reports
