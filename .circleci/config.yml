@@ -42,7 +42,14 @@ jobs:
       - run:
           name: Code analysis
           command: |
-            cd apps/demo && ./gradlew clean detekt && ./gradlew sonarqube
+            cd apps/demo && ./gradlew clean detekt
+      - run:
+          name: Sync with sonar
+          command: |
+            cd apps/demo
+            ls -la build/reports/detekt
+            ./gradlew sonarqube -i
+          when: always
   unit-test: 
     docker:
       - image: cimg/openjdk:18.0.2
@@ -105,6 +112,8 @@ workflows:
   build_and_deploy:
     <<: *run_when_branch_is_main
     jobs:
+      - static-code-analysis:
+          context: SonarCloud
       - unit-test:
           context: SonarCloud
       - build:
