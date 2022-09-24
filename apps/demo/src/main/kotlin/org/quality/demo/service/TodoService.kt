@@ -5,6 +5,7 @@ import org.quality.demo.model.Todo
 import org.quality.demo.repository.TodoRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Service
 class TodoService(
@@ -25,5 +26,14 @@ class TodoService(
         }
 
     }
+
+    fun update(todoId: UUID) = repository
+            .update(
+                Todo(
+                    id = todoId,
+                    description = "new desc",
+                    dueDate = LocalDateTime.now()
+                )
+            )
 
 }
