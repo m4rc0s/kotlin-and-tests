@@ -68,6 +68,19 @@ jobs:
             ls -la build/testReports/test
       - store_test_results:
           path: ~/test-results
+
+  publish-release:
+    docker:
+      - image: cimg/node:18.9.1
+        environment:
+          GITHUB_TOKEN: $GITHUB_TOKEN
+    steps:
+      - checkout
+      - run:
+          command: |
+            npx semantic-release \
+                --dry-run false \
+                -p "@semantic-release/commit-analyzer, @semantic-release/release-notes-generator, @semantic-release/github" --branches "main"
   build:
     docker:
       - image: cimg/openjdk:18.0.2
@@ -119,8 +132,9 @@ workflows:
       - build:
           requires:
             - unit-test
+      - publish-release:
+          context: SonarCloud
       - deploy:
-          name: deploy
           environment: prod
           requires:
-           - build
+           - "publish-release"
