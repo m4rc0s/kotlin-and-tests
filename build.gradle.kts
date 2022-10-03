@@ -25,8 +25,8 @@ tasks.register<NpxTask>("createRelease") {
 nyx {
     commitMessageConventions.enabled.add("conventionalCommits")
     preset.apply { set("extended") }
-    dryRun.apply { set(true) }
     releaseTypes {
+        releasePrefix.set("v")
         git {
             remotes {
                 add(remotes.create("origin")
