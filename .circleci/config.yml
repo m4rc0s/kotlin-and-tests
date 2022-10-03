@@ -134,7 +134,9 @@ workflows:
             - unit-test
       - publish-release:
           context: SonarCloud
+          requires: 
+           - build
       - deploy:
           environment: prod
           requires:
-           - "publish-release"
+           - publish-release
