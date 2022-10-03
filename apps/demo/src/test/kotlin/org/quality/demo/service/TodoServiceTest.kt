@@ -37,7 +37,7 @@ internal class TodoServiceTest {
 
         every { repository.save(any()) } returns expectedTodo
 
-        val actualTodo = service.Create(actualTodoDto)
+        val actualTodo = service.create(actualTodoDto)
 
         actualTodo.description shouldBe expectedTodo.description
         actualTodo.dueDate shouldNotBe LocalDateTime.now()

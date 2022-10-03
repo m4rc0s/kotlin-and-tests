@@ -5,15 +5,15 @@ import org.quality.demo.model.Todo
 import org.quality.demo.repository.TodoRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.util.Date
 import java.util.UUID
+
 
 @Service
 class TodoService(
     private val repository: TodoRepository
 ) {
-
-    fun Create(todoDTO: TodoDTO):Todo {
+    @Suppress("TooGenericExceptionThrown")
+    fun create(todoDTO: TodoDTO):Todo {
 
         if(todoDTO.dueDate <= LocalDateTime.now()) {
             throw Exception("Its impossible to complete in a time.")
@@ -28,7 +28,7 @@ class TodoService(
 
     }
 
-    fun Update(todoId: UUID) = repository
+    fun update(todoId: UUID) = repository
             .update(
                 Todo(
                     id = todoId,
