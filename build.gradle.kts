@@ -10,6 +10,7 @@ repositories {
 }
 
 tasks.register<NpxTask>("createRelease") {
+    workingDir.set(file("${project.layout.buildDirectory}"))
     command.apply { set("semantic-release") }
     args.set(listOf(
         "--no-ci",

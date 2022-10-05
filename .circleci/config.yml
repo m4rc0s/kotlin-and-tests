@@ -71,16 +71,16 @@ jobs:
 
   publish-release:
     docker:
-      - image: cimg/node:18.9.1
+      - image: timbru31/java-node:17-alpine-jdk-18
         environment:
           GITHUB_TOKEN: $GITHUB_TOKEN
     steps:
       - checkout
       - run:
+          name: "Publish release"
           command: |
-            npx semantic-release \
-                --dry-run false \
-                -p "@semantic-release/commit-analyzer, @semantic-release/release-notes-generator, @semantic-release/github" --branches "main"
+            ./gradlew createRelease
+
   build:
     docker:
       - image: cimg/openjdk:18.0.2
@@ -125,6 +125,8 @@ workflows:
   build_and_deploy:
     <<: *run_when_branch_is_main
     jobs:
+      - publish-release:
+          context: SonarCloud
       - static-code-analysis:
           context: SonarCloud
       - unit-test:
@@ -132,10 +134,6 @@ workflows:
       - build:
           requires:
             - unit-test
-      - publish-release:
-          context: SonarCloud
-          requires: 
-           - build
       - deploy:
           environment: prod
           requires:

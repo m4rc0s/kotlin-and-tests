@@ -8,4 +8,4 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
-rootProject.name = "quality-and-delivery-pipelines"
+rootProject.name = "software-delivery-lifecycle-demo"
