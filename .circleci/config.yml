@@ -142,12 +142,12 @@ workflows:
   build_and_deploy:
     <<: *run_when_branch_is_main
     jobs:
-      - static-code-analysis:
-          context: SonarCloud
+#      - static-code-analysis:
+#          context: SonarCloud
 #      - unit-test:
 #          context: SonarCloud
-#      - publish-release:
-#          context: SonarCloud
+      - publish-release:
+          context: SonarCloud
 #          requires:
 #            - unit-test
 #      - deploy:
