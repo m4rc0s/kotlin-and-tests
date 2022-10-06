@@ -1,4 +1,5 @@
 package org.quality.demo.service
+
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every

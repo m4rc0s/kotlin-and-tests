@@ -29,6 +29,7 @@ branch_is_main_filter: &run_when_branch_is_main
 
 orbs:
   gradle: circleci/gradle@3.0.0
+  heroku: circleci/heroku@2.0.0
 
 jobs:
   static-code-analysis:
@@ -104,7 +105,22 @@ jobs:
         default: dev
     docker:
       - image: cimg/openjdk:18.0.2
+        environment:
+          HEROKU_API_KEY: $HEROKU_API_KEY
+          HEROKU_APP_NAME: $HEROKU_APP_NAME
     steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - heroku/install
+      - run:
+          command: |
+            cd apps/demo
+            ./gradlew clean build
+            heroku container:login
+            heroku container:push web --app ${HEROKU_APP_NAME}
+            heroku container:release web --app ${HEROKU_APP_NAME}
       - deploy-cmd:
           environment: << parameters.environment >>
 
@@ -125,16 +141,7 @@ workflows:
   build_and_deploy:
     <<: *run_when_branch_is_main
     jobs:
-      - publish-release:
-          context: SonarCloud
-      - static-code-analysis:
-          context: SonarCloud
-      - unit-test:
-          context: SonarCloud
-      - build:
-          requires:
-            - unit-test
       - deploy:
+          context: SonarCloud
           environment: prod
-          requires:
-           - publish-release
+
