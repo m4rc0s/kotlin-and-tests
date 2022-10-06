@@ -80,6 +80,7 @@ jobs:
       - run:
           name: "Publish release"
           command: |
+            apt-get update
             ./gradlew createRelease
 
   build:
@@ -143,13 +144,13 @@ workflows:
     jobs:
       - static-code-analysis:
           context: SonarCloud
-      - unit-test:
-          context: SonarCloud
-      - publish-release:
-          context: SonarCloud
-          requires:
-            - unit-test
-      - deploy:
-          environment: prod
-          requires:
-           - publish-release
+#      - unit-test:
+#          context: SonarCloud
+#      - publish-release:
+#          context: SonarCloud
+#          requires:
+#            - unit-test
+#      - deploy:
+#          environment: prod
+#          requires:
+#           - publish-release
