@@ -24,8 +24,12 @@ branch_is_main_filter: &run_when_branch_is_main
   when:
     matches:
       pattern: "^main$"
-      value: << pipeline.git.branch >>        
+      value: << pipeline.git.branch >>
 
+new_version_released_filter: &run_when_new_release_created
+  when:
+    condition:
+      equal: ["^v.*", << pipeline.git.tag >>]
 
 orbs:
   gradle: circleci/gradle@3.0.0
@@ -72,7 +76,7 @@ jobs:
 
   publish-release:
     docker:
-      - image: timbru31/java-node:17-jdk-18
+      - image: locoslament/java-node-git:jdk17-node18-git
         environment:
           GITHUB_TOKEN: $GITHUB_TOKEN
     steps:
@@ -139,18 +143,31 @@ workflows:
           test_results_path: "./apps/demo/build/test-results/componentTest"
           reports_path: "./apps/demo/build/reports"
           test_command: "componentTest"
-  build_and_deploy:
+  build_and_release:
     <<: *run_when_branch_is_main
     jobs:
-#      - static-code-analysis:
-#          context: SonarCloud
-#      - unit-test:
-#          context: SonarCloud
+      - static-code-analysis:
+          context: SonarCloud
+      - unit-test:
+          context: SonarCloud
+      - release-approval:
+          type: approval
+          requires:
+            - unit-test
       - publish-release:
           context: SonarCloud
-#          requires:
-#            - unit-test
-#      - deploy:
-#          environment: prod
-#          requires:
-#           - publish-release
+          requires:
+            - release-approval
+      - deploy:
+          context: SonarCloud
+          requires:
+            - publish-release
+  delivery:
+    <<: *run_when_new_release_created
+    jobs:
+      - approve-prod-deploy:
+          type: approval
+      - deploy:
+          context: SonarCloud
+          requires:
+            - approve-prod-deploy
