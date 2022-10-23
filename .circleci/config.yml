@@ -167,18 +167,18 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-  #delivery:
-  #  <<: *run_when_new_release_created
-  #  jobs:
-  #    - approve-prod-deploy:
-  #        filters:
-  #          tags:
-  #            only: /v.*/
-  #        type: approval
-  #    - deploy:
-  #        filters:
-  #          tags:
-  #            only: /v.*/
-  #        context: SonarCloud
-  #        requires:
-  #          - approve-prod-deploy
+  delivery:
+    <<: *run_when_new_release_created
+    jobs:
+      - approve-prod-deploy:
+          filters:
+            tags:
+              only: /v.*/
+          type: approval
+      - deploy:
+          filters:
+            tags:
+              only: /v.*/
+          context: SonarCloud
+          requires:
+            - approve-prod-deploy
