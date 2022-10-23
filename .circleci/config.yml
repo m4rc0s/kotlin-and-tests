@@ -97,12 +97,9 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
-      - run: pwd && ls -la
-      - run: gradle --version
       - run: |
           cd apps/demo
           ./gradlew clean build
-          docker build .
   deploy:
     parameters:
       environment:
@@ -121,8 +118,6 @@ jobs:
       - heroku/install
       - run:
           command: |
-            cd apps/demo
-            ./gradlew clean build
             heroku container:login
             heroku container:push web --app ${HEROKU_APP_NAME}
             heroku container:release web --app ${HEROKU_APP_NAME}
@@ -151,6 +146,10 @@ workflows:
           context: SonarCloud
       - unit-test:
           context: SonarCloud
+      - build:
+          context: SonarCloud
+          requires:
+            - unit-test
       - release-approval:
           type: approval
           requires:
@@ -159,6 +158,15 @@ workflows:
           context: SonarCloud
           requires:
             - release-approval
+      - deploy:
+          context: SonarCloud
+          requires:
+            build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
   delivery:
     <<: *run_when_new_release_created
     jobs:
