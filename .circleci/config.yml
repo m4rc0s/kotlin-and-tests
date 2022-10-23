@@ -159,9 +159,10 @@ workflows:
           requires:
             - release-approval
       - deploy:
+          filters:
+            tags:
+              only: /v.*/
           context: SonarCloud
-          requires:
-            - publish-release
   delivery:
     <<: *run_when_new_release_created
     jobs:
