@@ -144,20 +144,35 @@ workflows:
     jobs:
       - static-code-analysis:
           context: SonarCloud
+          filters:
+            tags:
+              ignore: /.*/
       - unit-test:
           context: SonarCloud
+          filters:
+            tags:
+              ignore: /.*/
       - build:
           context: SonarCloud
           requires:
             - unit-test
+          filters:
+            tags:
+              ignore: /.*/
       - release-approval:
           type: approval
           requires:
             - build
+          filters:
+            tags:
+              ignore: /.*/
       - publish-release:
           context: SonarCloud
           requires:
             - release-approval
+          filters:
+            tags:
+              ignore: /.*/
       - deploy:
           context: SonarCloud
           requires:
