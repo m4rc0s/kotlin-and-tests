@@ -130,6 +130,7 @@ jobs:
           environment: << parameters.environment >>
 
 workflows:
+  version: 2
   quality_assurance:
     <<: *run_when_branch_not_main
     jobs:
