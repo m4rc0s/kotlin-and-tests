@@ -158,17 +158,18 @@ workflows:
           context: SonarCloud
           requires:
             - release-approval
-      - deploy:
-          filters:
-            tags:
-              only: /v.*/
-          context: SonarCloud
   delivery:
     <<: *run_when_new_release_created
     jobs:
       - approve-prod-deploy:
+          filters:
+            tags:
+              only: /v.*/
           type: approval
       - deploy:
+          filters:
+            tags:
+              only: /v.*/
           context: SonarCloud
           requires:
             - approve-prod-deploy
